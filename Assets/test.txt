@@ -1,6 +1,0 @@
-This is first commit test
-
-before revising test1
-
-test2 by laptop
-test2 by computer
