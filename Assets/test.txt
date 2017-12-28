@@ -2,3 +2,8 @@ This is first commit test
 
 before revising test1
 
+<<<<<<< HEAD
+test2 by laptop
+=======
+test2 by computer
+>>>>>>> c5eab90a5038b57624262794ab21b3db921d1261
