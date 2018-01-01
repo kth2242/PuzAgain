@@ -6,7 +6,7 @@ public class ThirdPersonCam : MonoBehaviour {
     private const float ZOOM_MIN = -2f;
     private const float ZOOM_MAX = -12f;
     private const float Y_AXIS_MIN = 0f;
-    private const float Y_AXIS_MAX = 50f;
+    private const float Y_AXIS_MAX = 70f;
 
     public Transform character;
     public Transform camTransform;
@@ -23,7 +23,8 @@ public class ThirdPersonCam : MonoBehaviour {
 	void Start ()
     {
         zoom = -5;
-	}
+        mouseX += 180f;
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -48,6 +49,11 @@ public class ThirdPersonCam : MonoBehaviour {
             mouseY = Mathf.Clamp(mouseY, Y_AXIS_MIN, Y_AXIS_MAX);
    
             LookUpdate();
+        }
+        else
+        {
+            mouseX += Input.GetAxis("Mouse X")*2f;
+            mouseY -= Input.GetAxis("Mouse Y");
         }
     }
     void LookUpdate()
