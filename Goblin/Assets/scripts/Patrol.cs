@@ -35,11 +35,15 @@ public class Patrol : MonoBehaviour {
 		if (i < destination.Length)
 		{
 			charS = CHARACTER_STATE.WALK;
-			this.transform.position = Vector3.Lerp (transform.position, destination [i].transform.position, /*speed **/ Time.deltaTime);
+			this.transform.position = Vector3.MoveTowards(transform.position, destination [i].transform.position, /*speed **/ Time.deltaTime);
 
-			if(IsObjectNearTarget(transform.position, destination[i].transform.position))
+            Vector3 lookDirection = destination[i].transform.position - this.transform.position;
+            Quaternion R = Quaternion.LookRotation(lookDirection);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, R, 1.5f);
+
+            if (IsObjectNearTarget(this.transform.position, destination[i].transform.position))
 				++i;
-		}
+        }
 		else
 			charS = CHARACTER_STATE.IDLE;
 	}
