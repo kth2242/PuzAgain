@@ -8,7 +8,8 @@ public enum CHARACTER_STATE
 	WALK,
 	RUN,
 	DEAD,
-	ATTACK
+	ATTACK,
+	STRAFE
 }
 
 public class Patrol : MonoBehaviour {
@@ -64,45 +65,59 @@ public class Patrol : MonoBehaviour {
 
 	void SetAnimator()
 	{
-		if(charS == CHARACTER_STATE.IDLE)
+		if (charS == CHARACTER_STATE.IDLE)
 		{
-			anim.SetBool ("IDLE_ON", true);
-			anim.SetBool ("WALK_ON", false);
-			anim.SetBool ("RUN_ON", false);
-			anim.SetBool ("ATTACK_ON", false);
-			anim.SetBool ("DEAD_ON", false);
+			anim.SetBool("IDLE_ON", true);
+			anim.SetBool("WALK_ON", false);
+			anim.SetBool("RUN_ON", false);
+			anim.SetBool("ATTACK_ON", false);
+			anim.SetBool("DEAD_ON", false);
+			anim.SetBool("STRAFE_ON", false);
 		}
-		else if(charS == CHARACTER_STATE.WALK)
+		else if (charS == CHARACTER_STATE.WALK)
 		{
-			anim.SetBool ("IDLE_ON", false);
-			anim.SetBool ("WALK_ON", true);
-			anim.SetBool ("RUN_ON", false);
-			anim.SetBool ("ATTACK_ON", false);
-			anim.SetBool ("DEAD_ON", false);
+			anim.SetBool("IDLE_ON", false);
+			anim.SetBool("WALK_ON", true);
+			anim.SetBool("RUN_ON", false);
+			anim.SetBool("ATTACK_ON", false);
+			anim.SetBool("DEAD_ON", false);
+			anim.SetBool("STRAFE_ON", false);
 		}
-		else if(charS == CHARACTER_STATE.RUN)
+		else if (charS == CHARACTER_STATE.RUN)
 		{
-			anim.SetBool ("IDLE_ON", false);
-			anim.SetBool ("WALK_ON", false);
-			anim.SetBool ("RUN_ON", true);
-			anim.SetBool ("ATTACK_ON", false);
-			anim.SetBool ("DEAD_ON", false);
+			anim.SetBool("IDLE_ON", false);
+			anim.SetBool("WALK_ON", false);
+			anim.SetBool("RUN_ON", true);
+			anim.SetBool("ATTACK_ON", false);
+			anim.SetBool("DEAD_ON", false);
+			anim.SetBool("STRAFE_ON", false);
 		}
-		else if(charS == CHARACTER_STATE.ATTACK)
+		else if (charS == CHARACTER_STATE.ATTACK)
 		{
-			anim.SetBool ("IDLE_ON", false);
-			anim.SetBool ("WALK_ON", false);
-			anim.SetBool ("RUN_ON", false);
-			anim.SetBool ("ATTACK_ON", true);
-			anim.SetBool ("DEAD_ON", false);
+			anim.SetBool("IDLE_ON", false);
+			anim.SetBool("WALK_ON", false);
+			anim.SetBool("RUN_ON", false);
+			anim.SetBool("ATTACK_ON", true);
+			anim.SetBool("DEAD_ON", false);
+			anim.SetBool("STRAFE_ON", false);
 		}
-		else if(charS == CHARACTER_STATE.DEAD)
+		else if (charS == CHARACTER_STATE.DEAD)
 		{
-			anim.SetBool ("IDLE_ON", false);
-			anim.SetBool ("WALK_ON", false);
-			anim.SetBool ("RUN_ON", false);
-			anim.SetBool ("ATTACK_ON", false);
-			anim.SetBool ("DEAD_ON", true);
+			anim.SetBool("IDLE_ON", false);
+			anim.SetBool("WALK_ON", false);
+			anim.SetBool("RUN_ON", false);
+			anim.SetBool("ATTACK_ON", false);
+			anim.SetBool("DEAD_ON", true);
+			anim.SetBool("STRAFE_ON", false);
+		}
+		else if (charS == CHARACTER_STATE.STRAFE)
+		{
+			anim.SetBool("IDLE_ON", false);
+			anim.SetBool("WALK_ON", false);
+			anim.SetBool("RUN_ON", false);
+			anim.SetBool("ATTACK_ON", false);
+			anim.SetBool("DEAD_ON", false);
+			anim.SetBool("STRAFE_ON", true);
 		}
 	}
 }

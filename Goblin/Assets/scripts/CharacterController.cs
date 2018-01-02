@@ -7,6 +7,8 @@ public class CharacterController : MonoBehaviour {
     public float speed = 1f;
     private Animator anim;
     private CHARACTER_STATE charS;
+	public GameObject[] enemy;
+	private float enemyDetectRange = 6.5f;
 
     // Use this for initialization
     void Start ()
@@ -19,21 +21,12 @@ public class CharacterController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        float translation = Input.GetAxis("Vertical") * speed;
-        float straffe = Input.GetAxis("Horizontal") * speed;
-
-        translation *= Time.deltaTime;
-        straffe *= Time.deltaTime;
-
-        if ((translation + straffe) == 0)
-            charS = CHARACTER_STATE.IDLE;
-        else
-            charS = CHARACTER_STATE.WALK;
+		SetMovement();
+		CheckNearEnemy();
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
             charS = CHARACTER_STATE.ATTACK;
-
-        transform.Translate(straffe, 0, translation);
+		
         SetAnimator();
 
         //Turning off the lock mode of the cursor (makes cursor visible)
@@ -41,6 +34,48 @@ public class CharacterController : MonoBehaviour {
         {
             Cursor.lockState = CursorLockMode.None;
         }
+	}
+
+	void SetMovement()
+	{
+		float translation = Input.GetAxis("Vertical");
+		float straffe = Input.GetAxis("Horizontal");
+
+		anim.SetFloat ("translation", translation);
+		anim.SetFloat ("straffe", straffe);
+
+		translation *= Time.deltaTime * speed;
+		straffe *= Time.deltaTime * speed;
+
+		if (translation == 0 && straffe == 0)
+			charS = CHARACTER_STATE.IDLE;
+		else if (Input.GetKey (KeyCode.LeftShift))
+		{
+			charS = CHARACTER_STATE.RUN;
+			translation *= 2f;
+			straffe *= 2f;
+		}
+		else
+			charS = CHARACTER_STATE.WALK;
+		
+		transform.Translate(straffe, 0, translation);
+	}
+
+	void CheckNearEnemy()
+	{
+		for(int i = 0; i < enemy.Length; ++i)
+		{
+			float distance = Vector3.Distance (enemy [i].transform.position, this.transform.position);
+
+			if (distance < enemyDetectRange)
+				charS = CHARACTER_STATE.STRAFE;
+		}
+
+		float translation = Input.GetAxis("Vertical");
+		float straffe = Input.GetAxis("Horizontal");
+
+		if (translation == 0 && straffe == 0)
+			charS = CHARACTER_STATE.IDLE;
 	}
 
     void SetAnimator()
@@ -52,6 +87,7 @@ public class CharacterController : MonoBehaviour {
             anim.SetBool("RUN_ON", false);
             anim.SetBool("ATTACK_ON", false);
             anim.SetBool("DEAD_ON", false);
+			anim.SetBool("STRAFE_ON", false);
         }
         else if (charS == CHARACTER_STATE.WALK)
         {
@@ -60,6 +96,7 @@ public class CharacterController : MonoBehaviour {
             anim.SetBool("RUN_ON", false);
             anim.SetBool("ATTACK_ON", false);
             anim.SetBool("DEAD_ON", false);
+			anim.SetBool("STRAFE_ON", false);
         }
         else if (charS == CHARACTER_STATE.RUN)
         {
@@ -68,6 +105,7 @@ public class CharacterController : MonoBehaviour {
             anim.SetBool("RUN_ON", true);
             anim.SetBool("ATTACK_ON", false);
             anim.SetBool("DEAD_ON", false);
+			anim.SetBool("STRAFE_ON", false);
         }
         else if (charS == CHARACTER_STATE.ATTACK)
         {
@@ -76,6 +114,7 @@ public class CharacterController : MonoBehaviour {
             anim.SetBool("RUN_ON", false);
             anim.SetBool("ATTACK_ON", true);
             anim.SetBool("DEAD_ON", false);
+			anim.SetBool("STRAFE_ON", false);
         }
         else if (charS == CHARACTER_STATE.DEAD)
         {
@@ -84,6 +123,16 @@ public class CharacterController : MonoBehaviour {
             anim.SetBool("RUN_ON", false);
             anim.SetBool("ATTACK_ON", false);
             anim.SetBool("DEAD_ON", true);
+			anim.SetBool("STRAFE_ON", false);
         }
+		else if (charS == CHARACTER_STATE.STRAFE)
+		{
+			anim.SetBool("IDLE_ON", false);
+			anim.SetBool("WALK_ON", false);
+			anim.SetBool("RUN_ON", false);
+			anim.SetBool("ATTACK_ON", false);
+			anim.SetBool("DEAD_ON", false);
+			anim.SetBool("STRAFE_ON", true);
+		}
     }
 }
