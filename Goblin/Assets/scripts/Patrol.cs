@@ -13,19 +13,23 @@ public enum CHARACTER_STATE
 }
 
 public class Patrol : MonoBehaviour {
-
-	public GameObject[] destination;
+	
 	public float offset = 1f;
-	private int i = 0;
-	//private float speed = 5f;
 	private CHARACTER_STATE charS;
 	private Animator anim;
+	public float wanderingRange = 3f;
+	public GameObject character;
+	private float enemyDetectRange = 6.5f; // should be same value in CharacterController.cs
+
+	private Vector3 destination;
 
 	void Start()
 	{
 		charS = CHARACTER_STATE.IDLE;
 		anim = GetComponent<Animator> ();
 		anim.SetBool ("IDLE_ON", true);
+		destination = new Vector3(Random.Range(this.transform.position.x - wanderingRange, this.transform.position.x + wanderingRange),
+			0, Random.Range(this.transform.position.z - wanderingRange, this.transform.position.z + wanderingRange));
 	}
 
 	// Update is called once per frame
@@ -33,20 +37,29 @@ public class Patrol : MonoBehaviour {
 
 		SetAnimator ();
 
-		if (i < destination.Length)
+		/* if citizen goblin get to the place, then set the next place */
+		if (IsObjectNearTarget (this.transform.position, destination))
+			destination = new Vector3 (Random.Range (this.transform.position.x - wanderingRange, this.transform.position.x + wanderingRange),
+				0, Random.Range (this.transform.position.z - wanderingRange, this.transform.position.z + wanderingRange));
+		/* if citizen goblin find the main character (main character is close to the citizen goblin) */
+		else if (Vector3.Distance (this.transform.position, character.transform.position) < enemyDetectRange)
+		{
+			/* citizen goblin start to look at the main character and do nothing */
+			charS = CHARACTER_STATE.IDLE;
+			Vector3 lookDirection = character.transform.position - this.transform.position;
+			Quaternion R = Quaternion.LookRotation(lookDirection);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, R, 10f);
+		}
+		/* patrol towards the destination position defined above */
+		else
 		{
 			charS = CHARACTER_STATE.WALK;
-			this.transform.position = Vector3.MoveTowards(transform.position, destination [i].transform.position, /*speed **/ Time.deltaTime);
+			this.transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime);
 
-            Vector3 lookDirection = destination[i].transform.position - this.transform.position;
-            Quaternion R = Quaternion.LookRotation(lookDirection);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, R, 1.5f);
-
-            if (IsObjectNearTarget(this.transform.position, destination[i].transform.position))
-				++i;
-        }
-		else
-			charS = CHARACTER_STATE.IDLE;
+			Vector3 lookDirection = destination - this.transform.position;
+			Quaternion R = Quaternion.LookRotation(lookDirection);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, R, 3f);
+		}
 	}
 
 	bool IsObjectNearTarget(Vector3 _object, Vector3 _target)
