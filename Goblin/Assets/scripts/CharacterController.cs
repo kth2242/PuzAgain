@@ -9,6 +9,7 @@ public class CharacterController : MonoBehaviour {
     private CHARACTER_STATE charS;
 	public GameObject[] enemy;
 	private float enemyDetectRange = 6.5f;
+    private Rigidbody rigidB;
 
     // Use this for initialization
     void Start ()
@@ -16,6 +17,7 @@ public class CharacterController : MonoBehaviour {
         //Hide the curser and lock the cursor inside the game
         Cursor.lockState = CursorLockMode.Locked;
         anim = GetComponent<Animator>();
+        rigidB = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
@@ -26,11 +28,12 @@ public class CharacterController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
             charS = CHARACTER_STATE.ATTACK;
-		
+        
         SetAnimator();
+        JumpUpdate();
 
         //Turning off the lock mode of the cursor (makes cursor visible)
-        if(Input.GetKeyDown("escape"))
+        if (Input.GetKeyDown("escape"))
         {
             Cursor.lockState = CursorLockMode.None;
         }
@@ -77,6 +80,27 @@ public class CharacterController : MonoBehaviour {
 		if (translation == 0 && straffe == 0)
 			charS = CHARACTER_STATE.IDLE;
 	}
+
+    void JumpUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            rigidB.AddForce(transform.up * 200f);
+        }
+
+        anim.SetFloat("characterY", this.transform.position.y);
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.name != "Stage")
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                collision.rigidbody.AddForce(transform.forward * 300f + transform.up * 200f);
+            }
+        }
+    }
 
     void SetAnimator()
     {
