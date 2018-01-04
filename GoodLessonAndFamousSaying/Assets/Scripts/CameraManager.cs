@@ -10,7 +10,7 @@ public class CameraManager : MonoBehaviour
     Camera thirdViewCam;
 
     private bool isFirstViewPoint = true;
-
+    
     // Use this for initialization
     void Start ()
     {

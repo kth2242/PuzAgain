@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class camMouseLook : MonoBehaviour
 {
-    private const float Y_AXIS_MIN = 0f;
+    private const float THIRD_Y_AXIS_MIN = 0;
+    private const float Y_AXIS_MIN = -50f;
     private const float Y_AXIS_MAX = 70f;
-
-
+    
     Vector2 smoothV;
 
     private float mouseX, mouseY;
@@ -51,7 +51,7 @@ public class camMouseLook : MonoBehaviour
         {
             mouseX += Input.GetAxis("Mouse X");
             mouseY -= Input.GetAxis("Mouse Y");
-            mouseY = Mathf.Clamp(mouseY, Y_AXIS_MIN, Y_AXIS_MAX);
+            mouseY = Mathf.Clamp(mouseY, THIRD_Y_AXIS_MIN, Y_AXIS_MAX);
         }
 	}
 }
